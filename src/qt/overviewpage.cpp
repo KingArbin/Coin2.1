@@ -118,6 +118,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
     //Play the movie man!
     QMovie *movie = new QMovie(":/movies/coin2spin", "gif", this);
     ui->coin2->setMovie(movie);
+    ui->coin2->setScaledContents(false);
     movie->start();
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);

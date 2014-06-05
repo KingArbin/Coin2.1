@@ -41,11 +41,11 @@ static CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 60 * 60 * 12;	// minimum age for coin age: 12 hours
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 100;    //60 * 60 * 24 * 100;	// stake age of full weight: 100Days
+unsigned int nStakeMinAge = 60 * 60 * 8 * 1;	// minimum age for coin age: 8 Hours
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 100;    //60 * 60 * 24 * 100;	// stake age of full weight: 100d
 unsigned int nStakeTargetSpacing = 60;			// 60 sec block spacing
 
-int64 nChainStartTime = 1400545857;
+int64 nChainStartTime = 1401695545;
 int nCoinbaseMaturity = 30;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -75,6 +75,9 @@ int64 nHPSTimerStart;
 
 // Settings
 int64 nTransactionFee = MIN_TX_FEE;
+int64_t nMinimumInputValue = 0;
+int64_t nReserveBalance = 0;
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -951,11 +954,11 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
         nSubsidy = 80000000 * COIN;	// 80 million coins, that all pow coins
 		return nSubsidy + nFees;
 	}
-	if(nHeight == 1455)
-	{
-	nSubsidy = 19800000 * COIN; //Stupid Exchanges
-		return nSubsidy + nFees;
-	}
+    if(nHeight == 1455)
+    {
+        nSubsidy = 19800000 * COIN;	// 80 million coins, that all pow coins
+        return nSubsidy + nFees;
+    }
 
     return nSubsidy + nFees;
 }
@@ -2108,8 +2111,8 @@ bool CBlock::AcceptBlock()
     if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
         return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
  
-    if (IsProofOfStake() && nHeight < MODIFIER_INTERVAL_SWITCH)
-            return DoS(100, error("AcceptBlock() : reject proof-of-stake at height %d", nHeight));
+    //if (IsProofOfStake() && nHeight < MODIFIER_INTERVAL_SWITCH)
+    //        return DoS(100, error("AcceptBlock() : reject proof-of-stake at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
@@ -2525,8 +2528,8 @@ bool LoadBlockIndex(bool fAllowNew)
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
         nStakeMinAge = 20 * 60; // test net min age is 20 min
-        nStakeMaxAge = 60 * 60; // test net min age is 60 min
-        nModifierInterval = 10 * 60; // test modifier interval is 10 minutes
+        nStakeMaxAge = 60 * 60; // test net max age is 60 min
+        //nModifierInterval = 10 * 60; // test modifier interval is 10 minutes
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
         nStakeTargetSpacing = 3 * 60; // test block spacing is 3 minutes
     }
@@ -2548,7 +2551,7 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis block
-        const char* pszTimestamp = "May 31st, 2014 Coin2.1 ready to rock ^_^";
+        const char* pszTimestamp = "June 2nd, 2014 Coin2.1 ready to rock. Bug fixes for everyone ^_^ ";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2561,22 +2564,15 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1401517869;
+        block.nTime    = 1401695545;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 2555129;
+        block.nNonce   = 640936;
 
 
-        //// debug print
-        block.print();
-        printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
-        printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
-        printf("block.nTime = %u \n", block.nTime);
-        printf("block.nNonce = %u \n", block.nNonce);
-
-        assert(block.hashMerkleRoot == uint256("0x372a9df1043456e4a79abef7767d7f59a7704ed7d968ca43120ad465dde8149c"));
 
 
-        if (false && (block.GetHash() != hashGenesisBlock)) {
+
+/*        if (false && (block.GetHash() != hashGenesisBlock)) {
          printf("CREATE GENESIS BLOCK CODE");
 
          // This will figure out a valid hash and Nonce if you're
@@ -2585,6 +2581,12 @@ bool LoadBlockIndex(bool fAllowNew)
              while (block.GetHash() > hashTarget)
                 {
                     ++block.nNonce;
+                    printf("Genesis Block # %u \n", block.nNonce);
+                    printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
+                    printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
+                    printf("block.HashTarget == %s\n", hashTarget.ToString().c_str());
+
+
                     if (block.nNonce == 0)
                     {
                         printf("NONCE WRAPPED, incrementing time");
@@ -2592,7 +2594,7 @@ bool LoadBlockIndex(bool fAllowNew)
                     }
                 }
          }
-
+*/
         //// debug print
         block.print();
         printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
@@ -2601,7 +2603,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("block.nNonce = %u \n", block.nNonce);
 
 
-
+          assert(block.hashMerkleRoot == uint256("0x33feeb335c78d716685c97dcb4ef9872f9ffaf0c15efc9e53fd1580c8d241024"));
           assert(block.GetHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
 
         // Start new block file

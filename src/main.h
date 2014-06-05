@@ -34,7 +34,7 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = 1.0 * CENT;
 static const int64 MIN_RELAY_TX_FEE = 1.0 * CENT;
-static const int64 MAX_MONEY = 100000000 * COIN;			// 80 Million
+static const int64 MAX_MONEY = 100000000 * COIN;			// 90 Million
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0.01 * COIN;	// 1% annual interest
 
 static const int MODIFIER_INTERVAL_SWITCH = 5000;
@@ -52,8 +52,8 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-static const uint256 hashGenesisBlockOfficial("0x000003b76d24b382f66b1302c4eac700d05c57270f9114c845954bbf31e7bc26");
-static const uint256 hashGenesisBlockTestNet ("0x7b0d675cf51c1ee17eea6214a9320e28103efea96d04ff0ca4b31e30152a173a");
+static const uint256 hashGenesisBlockOfficial("0x000005510a96f9c91fc4767e9fbb0c295abca7ff25d8dd286b3dba3a5975f374");
+static const uint256 hashGenesisBlockTestNet ("0x00000714b9a547df7ffe27ed459960a219fd61556b947fadeae29ba1fdc072a5");
 
 static const int64 nMaxClockDrift = 60 * 30;        // 30minutes
 
@@ -87,6 +87,8 @@ extern std::map<uint256, CBlock*> mapOrphanBlocks;
 
 // Settings
 extern int64 nTransactionFee;
+extern int64_t nReserveBalance;
+extern int64_t nMinimumInputValue;
 
 // Minimum disk space required - used in CheckDiskSpace()
 static const uint64 nMinDiskSpace = 52428800;

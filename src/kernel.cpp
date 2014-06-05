@@ -11,7 +11,7 @@ using namespace std;
 
 extern int nStakeMaxAge;
 extern int nStakeTargetSpacing;
-
+//extern unsigned int nTargetSpacing;
 // Modifier interval: time to elapse before new modifier is computed
 // Set to 3-hour for production network and 20-minute for test network
 
@@ -406,4 +406,14 @@ bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierCheck
         return nStakeModifierChecksum == mapStakeModifierCheckpoints[nHeight];
 	}
     return true;
+}
+
+// Get time weight
+int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd)
+{
+    // Kernel hash weight starts from 0 at the min age
+    // this change increases active coins participating the hash and helps
+    // to secure the network when proof-of-stake difficulty is low
+
+    return min(nIntervalEnd - nIntervalBeginning - nStakeMinAge, (int64_t)nStakeMaxAge);
 }

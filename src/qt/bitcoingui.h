@@ -72,7 +72,9 @@ private:
     QLabel *labelEncryptionIcon;
     QLabel *labelConnectionsIcon;
     QLabel *labelBlocksIcon;
+    QLabel *labelStakingIcon;
     QLabel *progressBarLabel;
+
     QProgressBar *progressBar;
 
     QMenuBar *appMenuBar;
@@ -95,6 +97,7 @@ private:
     QAction *openRPCConsoleAction;
     /** Chat actions */
     QAction *chatAction;
+
 
 
     QSystemTrayIcon *trayIcon;
@@ -181,6 +184,8 @@ private slots:
     void showNormalIfMinimized(bool fToggleHidden = false);
     /** simply calls showNormalIfMinimized(true) for use in SLOT() macro */
     void toggleHidden();
+    void updateStakingIcon();
+
 };
 
 #endif

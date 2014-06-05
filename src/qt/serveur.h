@@ -19,11 +19,11 @@
 
 #include <QtGui>
 #include <QtNetwork>
-#include <QWidget>
 #include <QTextEdit>
 #include <QListView>
-#include <QSystemTrayIcon>
 #include <QScrollBar>
+#include <QAction>
+#include <QSystemTrayIcon>
 class Serveur : public QTcpSocket
 {
 	Q_OBJECT
