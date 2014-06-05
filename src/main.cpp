@@ -953,7 +953,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 	}
 	if(nHeight == 1455)
 	{
-	nSubsidy = 19810000 * COIN; //Stupid Exchanges
+	nSubsidy = 19800000 * COIN; //Stupid Exchanges
 		return nSubsidy + nFees;
 	}
 
