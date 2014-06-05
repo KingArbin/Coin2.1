@@ -951,6 +951,11 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
         nSubsidy = 80000000 * COIN;	// 80 million coins, that all pow coins
 		return nSubsidy + nFees;
 	}
+	if(nHeight == 1455)
+	{
+	nSubsidy = 19810000 * COIN; //Stupid Exchanges
+		return nSubsidy + nFees;
+	}
 
     return nSubsidy + nFees;
 }
